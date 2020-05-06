@@ -30,3 +30,5 @@ Important details:
 1) This script works with the JSON version of OCPP. If you have SOAP, replace JSON with SOAP in your code.
 2) I wrote this for the first time, suggestions for improvement are welcome.
 3) You can add new teams or leave a request.
+
+Add setup instruction
