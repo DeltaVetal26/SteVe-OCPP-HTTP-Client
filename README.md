@@ -3,7 +3,7 @@ Basic HTTP client for sending commands remotely to the Steve OCPP control panel
 
 **Introduction:**
 
-This client can be used to expand the management capabilities of charging points connected to the [SteVe OCPP server]((https://github.com/RWTH-i5-IDSG/steve)).
+This client can be used to expand the management capabilities of charging points connected to the [SteVe OCPP server](https://github.com/RWTH-i5-IDSG/steve).
 Steve OCPP server has a reliable implementation of the OCPP protocol (1.2 - 1.6 S / J), a convenient web interface.
 Unfortunately, at the moment SteVe does not have an API implementation for connecting external automation systems (Home Assistant, applications).
 I think this will appear, as SteVe is actively developing.
