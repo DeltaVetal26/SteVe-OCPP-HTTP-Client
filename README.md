@@ -20,11 +20,11 @@ How it works:
 Conclusion: This script allows you to replace a person to create some automation.
 
 The implemented commands:
-1) Get the status of the connector (it will return the current state) - curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 001 & cmd = getConnectorState & ConnectorID = 2"
-2) DataTransfer (will return the answer) - curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 001 & cmd = DataTransfer & VendorID = YourVendor & MessageID = Hello!"
-3) RemoteStartTransaction (response not implemented) - curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 001 & cmd = RemoteStartTransaction & ConnectorID = 2 & idTag = ABCDE"
-4) RemoteStopTransaction (response not implemented) - curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 001 & cmd = RemoteStopTransaction & ConnectorID = 2 & idTag = ABCDE"
-5) UnlockConnector (no response) - curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 328002 & cmd = UnlockConnector & ConnectorID = 2"
+1) Get the status of the connector (it will return the current state) - ```curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 001 & cmd = getConnectorState & ConnectorID = 2"```
+2) DataTransfer (will return the answer) - ```curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 001 & cmd = DataTransfer & VendorID = YourVendor & MessageID = Hello!"```
+3) RemoteStartTransaction (response not implemented) - ```curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 001 & cmd = RemoteStartTransaction & ConnectorID = 2 & idTag = ABCDE"```
+4) RemoteStopTransaction (response not implemented) - ```curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 001 & cmd = RemoteStopTransaction & ConnectorID = 2 & idTag = ABCDE"```
+5) UnlockConnector (no response) - ```curl "http: //youraddress/main.php? Key = XXXXX & ChargeBoxID = 328002 & cmd = UnlockConnector & ConnectorID = 2"```
 
 Important details:
 1) This script works with the JSON version of OCPP. If you have SOAP, replace JSON with SOAP in your code.
