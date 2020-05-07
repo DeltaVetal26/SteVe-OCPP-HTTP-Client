@@ -33,7 +33,7 @@ Conclusion: This script allows you to replace a person to create some automation
 4) RemoteStopTransaction (response not implemented):
 > `curl "http: //youraddress/main.php?Key=YourKey&ChargeBoxID=001&cmd=RemoteStopTransaction&ConnectorID=2&idTag=ABCDE"`
 5) UnlockConnector (no response):
-> `curl "http://youraddress/main.php?Key=YourKey&ChargeBoxID=328002&cmd=UnlockConnector&ConnectorID=2"`
+> `curl "http://youraddress/main.php?Key=YourKey&ChargeBoxID=001&cmd=UnlockConnector&ConnectorID=2"`
 
 
 **Important details:**
@@ -44,7 +44,7 @@ Conclusion: This script allows you to replace a person to create some automation
 
 **Configuration:**
 ```php
- $steveServerAddres = 'http://xx.xx.xxx.xx:8080'; // Steve server address
+ $steveServerAddres = 'http://xx.xx.xxx.xx:0000'; // Steve server address
  $steveLogin = 'admin'; // Steve login
  $stevePass = '1234'; // Steve pass
  $authKey = 'WriteYourKey'; // Protection key (Generate it for and enter each time you access the script)
