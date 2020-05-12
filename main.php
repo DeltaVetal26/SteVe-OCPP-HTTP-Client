@@ -2,23 +2,26 @@
   // Steve OCPP HTTP client emulator
 
   // Configuration
-  $steveServerAddres = 'http://xx.xx.xxx.xx:8080';
-  $steveLogin = 'admin';
-  $stevePass = '1234';
-  $authKey = 'WriteYourKey';
-  $ocppProtocol = 'JSON'; // or SOAP
+  $steveServerAddres = '';
+  $steveLogin = '';
+  $stevePass = '';
+  $authKey = '';
+  $ocppProtocol = ''; // or SOAP
+  $ocppVersion = '';
+  $supervision = '';
 
   // Steve commands path array
   $stevePathArray = array(
     // Local cmd (not use)
-    'signin' => '/steve/manager/signin',
-    'getTransaction' => '/steve/manager/transactions',
-    'getConnectorState' => '/steve/manager/home/connectorStatus',
+    'signin' => '/' . $supervision . '/manager/signin',
+    'getTransaction' => '/' . $supervision . '/manager/transactions',
+    'getConnectorState' => '/' . $supervision . '/manager/home/connectorStatus',
     // OCPP cmd
-    'RemoteStartTransaction' => '/steve/manager/operations/v1.6/RemoteStartTransaction',
-    'RemoteStopTransaction' => '/steve/manager/operations/v1.6/RemoteStopTransaction',
-    'UnlockConnector' => '/steve/manager/operations/v1.6/UnlockConnector',
-    'DataTransfer' => '/steve/manager/operations/v1.6/DataTransfer'
+    'RemoteStartTransaction' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/RemoteStartTransaction',
+    'RemoteStopTransaction' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/RemoteStopTransaction',
+    'UnlockConnector' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/UnlockConnector',
+    'DataTransfer' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/DataTransfer',
+    'Reset' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/Reset'
   );
 
   // Variables
@@ -45,6 +48,7 @@
     $steveServerURL = $steveServerAddres . $stevePathArray;
     curl_setopt($curl, CURLOPT_URL, $steveServerURL);
     $content = curl_exec($curl);
+    echo $content;
     return $content;
   }
 
@@ -168,7 +172,7 @@
 
   // # Command selector
   function cmdInputSelector($getData) {
-    global $curl, $content, $steveServerAddres, $stevePathArray;
+    global $curl, $content, $steveServerAddres, $stevePathArray, $ocppProtocol;
 
     // Set path
     $stevePath = $stevePathArray[$getData['cmd']];
@@ -250,6 +254,26 @@
           $response = htmlParser($getData, 'getDataTransferResponse');
           // Return response
           return $response;
+        }
+        break;
+      case 'Reset':
+        $allow = true; // Allow command?
+        if($allow) {
+          // Redirect to Reset page
+          $content = curlConnectTo($steveServerAddres, $stevePath);
+          // Get token
+          $token = getCSRFToken($content);
+          // Prepare form
+          $cbid = explode(";",$getData['ChargeBoxID']);
+		  $toReset = "";
+		  for ($i = 0; $i < count($cbid); $i++){
+			  $toReset = $toReset . "chargePointSelectList=".$ocppProtocol.";" .$cbid[$i] . ";-&";
+		  }
+          $form = $toReset . "_chargePointSelectList=1&resetType=HARD&_csrf=".$token."";
+          // Send form
+          curl_setopt($curl, CURLOPT_POSTFIELDS, $form);
+          curl_exec($curl);
+          return 'OK';
         }
         break;
       default:
