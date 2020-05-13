@@ -25,15 +25,17 @@ Conclusion: This script allows you to replace a person to create some automation
 
 **The implemented commands:**
 1) Get connector state (it will return the current state):
-> `curl "http://youraddress/main.php?Key=YourKey&ChargeBoxID=001&cmd=getConnectorState&ConnectorID=2"`
+> `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=getConnectorState&ConnectorID=2"`
 2) DataTransfer (will return the answer):
-> `curl "http://youraddress/main.php?Key=YourKey&ChargeBoxID=001&cmd=DataTransfer&VendorID=YourVendor&MessageID=Hello!"`
+> `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=DataTransfer&VendorID=YourVendor&MessageID=Hello!"`
 3) RemoteStartTransaction (response not implemented):
-> `curl "http://youraddress/main.php?Key=YourKey&ChargeBoxID=001&cmd=RemoteStartTransaction&ConnectorID=2&idTag=ABCDE"`
+> `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=RemoteStartTransaction&ConnectorID=2&idTag=ABCDE"`
 4) RemoteStopTransaction (response not implemented):
-> `curl "http: //youraddress/main.php?Key=YourKey&ChargeBoxID=001&cmd=RemoteStopTransaction&ConnectorID=2&idTag=ABCDE"`
+> `curl "http: //youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=RemoteStopTransaction&ConnectorID=2&idTag=ABCDE"`
 5) UnlockConnector (no response):
-> `curl "http://youraddress/main.php?Key=YourKey&ChargeBoxID=001&cmd=UnlockConnector&ConnectorID=2"`
+> `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=UnlockConnector&ConnectorID=2"`
+6) Reset (no response):
+> `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001;002;003&cmd=Reset"`
 
 
 **Important details:**
@@ -49,5 +51,7 @@ Conclusion: This script allows you to replace a person to create some automation
  $stevePass = '1234'; // Steve pass
  $authKey = 'WriteYourKey'; // Protection key (Generate it for and enter each time you access the script)
  $ocppProtocol = 'JSON'; // (If use OCPP-S - change to SOAP)
+ $ocppVersion = 'v1.6';
+ $supervision = 'steve';
 ```
 
