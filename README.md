@@ -33,8 +33,9 @@ Conclusion: This script allows you to replace a person to create some automation
 4) RemoteStopTransaction (response not implemented):
 > `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=RemoteStopTransaction&ConnectorID=2&idTag=ABCDE"`
 5) ReserveNow (response not implemented):
-> `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=ReserveNow&ConnectorID=2&idTag=ABCDE&Expiry=2020-07-09+12:30"` // Expiry = 2020-07-09 12:30
-6) UnlockConnector (no response):
+    - Expiry=2020-07-09 12:30
+> `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=ReserveNow&ConnectorID=2&idTag=ABCDE&Expiry=2020-07-09+12:30"`
+1) UnlockConnector (no response):
 > `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=UnlockConnector&ConnectorID=2"`
 7) Reset (no response):
 > `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001;002;003&cmd=Reset"`
