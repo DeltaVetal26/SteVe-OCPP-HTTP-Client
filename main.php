@@ -17,6 +17,7 @@
     'getTransaction' => '/' . $supervision . '/manager/transactions',
     'getConnectorState' => '/' . $supervision . '/manager/home/connectorStatus',
     // OCPP cmd
+    'ReserveNow' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/ReserveNow',
     'RemoteStartTransaction' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/RemoteStartTransaction',
     'RemoteStopTransaction' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/RemoteStopTransaction',
     'UnlockConnector' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/UnlockConnector',
@@ -185,6 +186,21 @@
           // Get connector state
           $connectorState = htmlParser($getData, 'getConnectorState');
           return $connectorState;
+        }
+        break;
+      case 'ReserveNow':
+        $allow = true; // Allow command?
+        if($allow) {
+          // Redirect to ReserveNow page
+          $content = curlConnectTo($steveServerAddres, $stevePath);
+          // Get token
+          $token = getCSRFToken($content);
+          // Prepare form
+          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";-&connectorId=".$getData['ConnectorID']."&expiry=".$getData['Expiry']."&idTag=".$getData['idTag']."&_csrf=".$token."";
+          // Send form
+          curl_setopt($curl, CURLOPT_POSTFIELDS, $form);
+          curl_exec($curl);
+          return 'Ok';
         }
         break;
       case 'RemoteStartTransaction':
