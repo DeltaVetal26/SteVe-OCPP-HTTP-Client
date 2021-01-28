@@ -1,14 +1,15 @@
 <?php
   // Steve OCPP HTTP client emulator
+  // NOTE: Do not use the & symbol in login, steve password, and AuthKey. It won't work.
 
   // Configuration
-  $steveServerAddres = '';
+  $steveServerAddres = 'http://00.00.000.00:8080';
   $steveLogin = '';
   $stevePass = '';
   $authKey = '';
-  $ocppProtocol = ''; // or SOAP
-  $ocppVersion = '';
-  $supervision = '';
+  $ocppProtocol = 'JSON'; // or SOAP
+  $ocppVersion = 'v1.6';
+  $supervision = 'steve';
 
   // Steve commands path array
   $stevePathArray = array(
@@ -49,7 +50,7 @@
     $steveServerURL = $steveServerAddres . $stevePathArray;
     curl_setopt($curl, CURLOPT_URL, $steveServerURL);
     $content = curl_exec($curl);
-    echo $content;
+    //echo $content;
     return $content;
   }
 
