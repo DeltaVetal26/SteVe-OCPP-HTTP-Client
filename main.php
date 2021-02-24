@@ -7,9 +7,12 @@
   $steveLogin = '';
   $stevePass = '';
   $authKey = '';
-  $ocppProtocol = 'JSON'; // or SOAP
-  $ocppVersion = 'v1.6';
+  $ocppProtocol = 'SOAP'; // or JSON
+  $ocppVersion = 'v1.5';  // or 1.6
   $supervision = 'steve';
+  // Only for SOAP use - charge point endpoint url
+  // Write here your charge point endpoint url
+  $endpointURL = 'http://localhost:9090/ocpp'; // (ex: http://localhost:9090/ocpp)
 
   // Steve commands path array
   $stevePathArray = array(
@@ -29,6 +32,10 @@
   // Variables
   $getData = $_GET;
   $curl = "";
+
+  // Using endpoint? (for SOAP only)
+  if($ocppProtocol == 'JSON') { $endpointURL = '-'; }
+
 
   // Functions
   // # cURL init
@@ -174,7 +181,7 @@
 
   // # Command selector
   function cmdInputSelector($getData) {
-    global $curl, $content, $steveServerAddres, $stevePathArray, $ocppProtocol;
+    global $curl, $content, $steveServerAddres, $stevePathArray, $ocppProtocol, $endpointURL;
 
     // Set path
     $stevePath = $stevePathArray[$getData['cmd']];
@@ -197,7 +204,7 @@
           // Get token
           $token = getCSRFToken($content);
           // Prepare form
-          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";-&connectorId=".$getData['ConnectorID']."&expiry=".$getData['Expiry']."&idTag=".$getData['idTag']."&_csrf=".$token."";
+          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";".$endpointURL."&connectorId=".$getData['ConnectorID']."&expiry=".$getData['Expiry']."&idTag=".$getData['idTag']."&_csrf=".$token."";
           // Send form
           curl_setopt($curl, CURLOPT_POSTFIELDS, $form);
           curl_exec($curl);
@@ -212,7 +219,7 @@
           // Get token
           $token = getCSRFToken($content);
           // Prepare form
-          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";-&connectorId=".$getData['ConnectorID']."&idTag=".$getData['idTag']."&_csrf=".$token."";
+          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";".$endpointURL."&connectorId=".$getData['ConnectorID']."&idTag=".$getData['idTag']."&_csrf=".$token."";
           // Send form
           curl_setopt($curl, CURLOPT_POSTFIELDS, $form);
           curl_exec($curl);
@@ -229,7 +236,7 @@
           // Get token
           $token = getCSRFToken($content);
           // Prepare form
-          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";-&transactionId=".$steveTransactionID."&_csrf=".$token."";
+          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";".$endpointURL."&transactionId=".$steveTransactionID."&_csrf=".$token."";
           // Send form
           curl_setopt($curl, CURLOPT_POSTFIELDS, $form);
           curl_exec($curl);
@@ -244,7 +251,7 @@
           // Get token
           $token = getCSRFToken($content);
           // Prepare form
-          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";-&connectorId=".$getData['ConnectorID']."&_csrf=".$token."";
+          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";".$endpointURL."&connectorId=".$getData['ConnectorID']."&_csrf=".$token."";
           // Send form
           curl_setopt($curl, CURLOPT_POSTFIELDS, $form);
           curl_exec($curl);
@@ -259,7 +266,7 @@
           // Get token
           $token = getCSRFToken($content);
           // Prepare form
-          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";-&vendorId=".$getData['VendorID']."&messageId=".$getData['MessageID']."&data=".$getData['Data']."&_csrf=".$token."";
+          $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";".$endpointURL."&vendorId=".$getData['VendorID']."&messageId=".$getData['MessageID']."&data=".$getData['Data']."&_csrf=".$token."";
           // Send form
           curl_setopt($curl, CURLOPT_POSTFIELDS, $form);
           curl_exec($curl);
@@ -284,7 +291,7 @@
           $cbid = explode(";",$getData['ChargeBoxID']);
 		  $toReset = "";
 		  for ($i = 0; $i < count($cbid); $i++){
-			  $toReset = $toReset . "chargePointSelectList=".$ocppProtocol.";" .$cbid[$i] . ";-&";
+			  $toReset = $toReset . "chargePointSelectList=".$ocppProtocol.";" .$cbid[$i] . ";".$endpointURL."&";
 		  }
           $form = $toReset . "_chargePointSelectList=1&resetType=HARD&_csrf=".$token."";
           // Send form
