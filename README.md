@@ -35,10 +35,13 @@ Conclusion: This script allows you to replace a person to create some automation
 5) ReserveNow (response not implemented):
     - Expiry=2020-07-09 12:30
 > `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=ReserveNow&ConnectorID=2&idTag=ABCDE&Expiry=2020-07-09+12:30"`
-1) UnlockConnector (no response):
+6) UnlockConnector (no response):
 > `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=UnlockConnector&ConnectorID=2"`
 7) Reset (no response):
 > `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001;002;003&cmd=Reset"`
+8) SetChargingProfile (not response):
+> `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=SetChargingProfile&ChargingProfileID=1&ConnectorID=0"`
+
 
 
 **Important details:**
@@ -56,5 +59,8 @@ Conclusion: This script allows you to replace a person to create some automation
  $ocppProtocol = 'JSON'; // (If use OCPP-S - change to SOAP)
  $ocppVersion = 'v1.6';
  $supervision = 'steve';
+ // Only for SOAP use - charge point endpoint url
+ // Write here your charge point endpoint url
+ $endpointURL = 'http://localhost:9090/ocpp'; // (ex: http://localhost:9090/ocpp)
 ```
 
