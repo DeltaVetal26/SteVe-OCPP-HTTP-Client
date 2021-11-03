@@ -1,5 +1,5 @@
 <?php
-  // Steve OCPP HTTP client emulator
+  // Steve OCPP HTTP client emulator (v1.5)
   // NOTE: Do not use the & symbol in login, steve password, and AuthKey. It won't work.
 
   // Configuration
@@ -7,8 +7,8 @@
   $steveLogin = '';
   $stevePass = '';
   $authKey = '';
-  $ocppProtocol = 'SOAP'; // or JSON
-  $ocppVersion = 'v1.5';  // or 1.6
+  $ocppProtocol = 'JSON'; // or JSON
+  $ocppVersion = 'v1.6';  // or 1.6
   $supervision = 'steve';
   // Only for SOAP use - charge point endpoint url
   // Write here your charge point endpoint url
@@ -26,7 +26,8 @@
     'RemoteStopTransaction' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/RemoteStopTransaction',
     'UnlockConnector' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/UnlockConnector',
     'DataTransfer' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/DataTransfer',
-    'Reset' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/Reset'
+    'Reset' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/Reset',
+    'SetChargingProfile' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/SetChargingProfile'
   );
 
   // Variables
@@ -35,7 +36,6 @@
 
   // Using endpoint? (for SOAP only)
   if($ocppProtocol == 'JSON') { $endpointURL = '-'; }
-
 
   // Functions
   // # cURL init
@@ -289,30 +289,44 @@
           $token = getCSRFToken($content);
           // Prepare form
           $cbid = explode(";",$getData['ChargeBoxID']);
-		  $toReset = "";
-		  for ($i = 0; $i < count($cbid); $i++){
-			  $toReset = $toReset . "chargePointSelectList=".$ocppProtocol.";" .$cbid[$i] . ";".$endpointURL."&";
-		  }
+		      $toReset = "";
+		      for($i = 0; $i < count($cbid); $i++) {
+			      $toReset = $toReset . "chargePointSelectList=".$ocppProtocol.";" .$cbid[$i] . ";".$endpointURL."&";
+		      }
           $form = $toReset . "_chargePointSelectList=1&resetType=HARD&_csrf=".$token."";
           // Send form
           curl_setopt($curl, CURLOPT_POSTFIELDS, $form);
           curl_exec($curl);
-          return 'OK';
+          return 'Ok';
         }
+        break;
+      case 'SetChargingProfile':
+         $allow = true; // Allow command?
+         if($allow) {
+           // Redirect to Reset page
+           $content = curlConnectTo($steveServerAddres, $stevePath);
+           // Get token
+           $token = getCSRFToken($content);
+           // Prepare form
+           $form = "chargePointSelectList=".$ocppProtocol.";".$getData['ChargeBoxID'].";".$endpointURL."&connectorId=".$getData['ConnectorID']."&chargingProfilePk=".$getData['ChargingProfileID']."&_csrf=".$token."";
+           // Send form
+           curl_setopt($curl, CURLOPT_POSTFIELDS, $form);
+           curl_exec($curl);
+           return 'Ok';
+         }
         break;
       default:
         // Unknown command
-        return 'Unknown';
+        return 'Unknown command';
         break;
     }
 
     // Command not allow?
     if(!$allow) {
-      return 'NotAllow';
+      return 'Command NotAllow';
     }
 
   }
-
 
   /*** Сode execution ***/
   // Auth
