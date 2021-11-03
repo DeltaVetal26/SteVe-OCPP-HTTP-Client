@@ -39,7 +39,7 @@ Conclusion: This script allows you to replace a person to create some automation
 > `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=UnlockConnector&ConnectorID=2"`
 7) Reset (no response):
 > `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001;002;003&cmd=Reset"`
-8) SetChargingProfile (not response):
+8) SetChargingProfile (no response):
 > `curl "http://youraddress/main.php?key=YourKey&ChargeBoxID=001&cmd=SetChargingProfile&ChargingProfileID=1&ConnectorID=0"`
 
 
