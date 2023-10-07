@@ -1,5 +1,5 @@
 <?php
-  // Steve OCPP HTTP client emulator (v1.5)
+  // Steve OCPP HTTP client emulator (v1.6)
   // NOTE: Do not use the & symbol in login, steve password, and AuthKey. It won't work.
 
   // Configuration
@@ -7,8 +7,8 @@
   $steveLogin = '';
   $stevePass = '';
   $authKey = '';
-  $ocppProtocol = 'JSON'; // or JSON
-  $ocppVersion = 'v1.6';  // or 1.6
+  $ocppProtocol = 'JSON'; // or SOAP
+  $ocppVersion = 'v1.6';  // Your OCPP version
   $supervision = 'steve';
   // Only for SOAP use - charge point endpoint url
   // Write here your charge point endpoint url
@@ -19,8 +19,8 @@
     // Local cmd (not use)
     'signin' => '/' . $supervision . '/manager/signin',
     'getTransaction' => '/' . $supervision . '/manager/transactions',
-    'getConnectorState' => '/' . $supervision . '/manager/home/connectorStatus',
     // OCPP cmd
+    'getConnectorState' => '/' . $supervision . '/manager/home/connectorStatus',
     'ReserveNow' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/ReserveNow',
     'RemoteStartTransaction' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/RemoteStartTransaction',
     'RemoteStopTransaction' => '/' . $supervision . '/manager/operations/' . $ocppVersion . '/RemoteStopTransaction',
@@ -47,7 +47,7 @@
     curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 6.0; ru; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3');
+    curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36');
     return $curl;
   }
 
@@ -158,18 +158,26 @@
       }
       return 'TransactionNotExist';
     }
-    // Get connector state
-    else if($mode == 'getConnectorState') {
-      // Search last connector state
-      foreach ($dataArray as $key) {
-        if(($key['ChargeBox ID'] == $getData['ChargeBoxID']) && ($key['Connector ID'] == $getData['ConnectorID'])) {
-          // Return transaction ID
-          return $key['Status'];
-        }
-      }
-      return 'StateNotExist';
-    }
-    // Get DataTransfer respose
+
+    // Get connector state (Fixing the space issue)
+	  else if($mode == 'getConnectorState') {
+      // Input data
+      $requiredChargeBoxID = $getData['ChargeBoxID'];
+      $requiredConnectorID = $getData['ConnectorID'];
+
+		  foreach($dataArray as $key) {
+		  	// Сlear the spaces
+        $existChargeBoxID = trim($key['ChargeBox ID']);
+        $existConnectorID = trim($key['Connector ID']);
+        // Compare
+			  if(($requiredChargeBoxID == $existChargeBoxID) && ($requiredConnectorID == $existConnectorID)) {
+			  	return $key['Status'];
+			  }
+		  }
+		  return 'StateNotExist';
+	  }
+
+    // Get DataTransfer response
     else if($mode == 'getDataTransferResponse') {
       $response = $dataArray[1]['Response'];
       if($response == NULL) {
